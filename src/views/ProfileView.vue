@@ -49,7 +49,7 @@
           :src="require('@/assets/delete.png')"
           alt="Delete Tweet"
         >
-        <div class="username-info">@{{ user.username }}</div>
+        <div class="username-info">@{{ tweet.username }}</div>
       </div>     
     </div>
   </div>
@@ -64,14 +64,27 @@ export default {
         following: 120,
         followers: 300
       },
-      tweets: []
+      tweets: [],
     };
   },
-  mounted() {
+  created(){
     this.loadUserData();
-    this.loadTweets();
+    this.loadTweets(); 
+  }, 
+  computed: {
+    userTweets() {
+      return this.tweets.filter(tweet => tweet.username === this.user.username);
+    }
+  },
+  mounted() {
+  
+     this.getUserTweets();
+
   },
   methods: {
+    getUserTweets(){
+      this.userTweets = this.tweets.filter(tweet => tweet.username === this.user.username);
+    },
     loadUserData() {
       const savedData = localStorage.getItem('formData');
       if (savedData) {
@@ -83,9 +96,10 @@ export default {
     returnHome() {
     },
     addTweet() {
+      debugger
       const newTweetContent = this.tweets[0]?.content || "";
       if (newTweetContent.trim()) {
-        this.tweets.unshift({ content: newTweetContent, disabled: true });
+        this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
         this.tweets[0].content = "";
         this.saveTweets();
       }
@@ -104,7 +118,7 @@ export default {
       if (savedTweets) {
         this.tweets = JSON.parse(savedTweets);
       } else {
-        this.tweets = [{ content: "", disabled: false }];
+        this.tweets = [{ content: "", username:"", disabled: false }];
       }
     }
   }

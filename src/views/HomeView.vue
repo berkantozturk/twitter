@@ -21,7 +21,7 @@
         cols="100" 
         rows="5" 
         v-model="tweet.content" 
-        :disabled="tweet.disabled" 
+        :disabled="index !== 0" 
         placeholder="Bugün nasılsın ?.."
       ></textarea>
       <div v-if="index === 0" class="tweet-actions">
@@ -40,6 +40,7 @@
           :src="require('@/assets/delete.png')"
           alt="Delete Tweet"
         >
+        <div class="username-info">@{{ tweet.username }}</div>
       </div>
     </div>
   </div>
@@ -49,17 +50,21 @@
 export default {
   data() {
     return {
+      user: {
+        userId: ""
+      },
       tweets: []
     };
   },
   created() {
     this.loadTweets();
+    this.loadUserId();
   },
   methods: {
     addTweet() {
       const newTweetContent = this.tweets[0]?.content || "";
       if (newTweetContent.trim()) {
-        this.tweets.push({ content: newTweetContent, disabled: true });
+        this.tweets.unshift({ content: newTweetContent, username: this.user.userId, disabled: true });
         this.tweets[0].content = "";
         this.saveTweets();
       }
@@ -79,6 +84,14 @@ export default {
         this.tweets = JSON.parse(savedTweets);
       } else {
         this.tweets = [{ content: "", disabled: false }];
+      }
+    },
+    loadUserId() {
+      const savedUserId = localStorage.getItem('userId');
+      if (savedUserId) {
+        this.user.userId = savedUserId;
+      } else {
+        this.user.userId = "defaultUserId";
       }
     }
   }
@@ -117,7 +130,11 @@ export default {
   padding: 10px;
   border: 1px solid #ccc;
 }
-
+.username-info {
+  position: relative;
+  left: -130vh;
+  bottom: 270px;
+}
 .profile-container {
   max-width: 600px;
   margin: 0 auto;
