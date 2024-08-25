@@ -51,20 +51,23 @@ export default {
   data() {
     return {
       user: {
-        userId: ""
+        name: "",
+        username: "",
+        following: 120,
+        followers: 300
       },
-      tweets: []
+      tweets: [],
     };
   },
   created() {
     this.loadTweets();
-    this.loadUserId();
+    this.loadUserData();
   },
   methods: {
     addTweet() {
       const newTweetContent = this.tweets[0]?.content || "";
       if (newTweetContent.trim()) {
-        this.tweets.unshift({ content: newTweetContent, username: this.user.userId, disabled: true });
+        this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
         this.tweets[0].content = "";
         this.saveTweets();
       }
@@ -86,17 +89,18 @@ export default {
         this.tweets = [{ content: "", disabled: false }];
       }
     },
-    loadUserId() {
-      const savedUserId = localStorage.getItem('userId');
-      if (savedUserId) {
-        this.user.userId = savedUserId;
-      } else {
-        this.user.userId = "defaultUserId";
+    loadUserData() {
+      const savedData = localStorage.getItem('formData');
+      if (savedData) {
+        const formData = JSON.parse(savedData);
+        this.user.name = `${formData.firstName} ${formData.lastName}`;
+        this.user.username = formData.userId;
       }
-    }
+    },
   }
 };
 </script>
+
 
 <style>
 .tweet-actions {

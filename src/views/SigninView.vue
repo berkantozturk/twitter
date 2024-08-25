@@ -50,7 +50,6 @@ export default {
   methods: {
     handleSubmit() {
       this.saveFormData();
-      this.saveUserCredentials();
       this.message = 'Başarıyla kayıt yaptınız!';
       this.clearForm(); 
     },
@@ -63,13 +62,6 @@ export default {
         sifre: this.sifre
       };
       localStorage.setItem('formData', JSON.stringify(formData));
-    },
-    saveUserCredentials() {
-      const userCredentials = {
-        userId: this.userId,
-        sifre: this.sifre
-      };
-      localStorage.setItem('userCredentials', JSON.stringify(userCredentials));
     },
     clearForm() {
       this.firstName = '';

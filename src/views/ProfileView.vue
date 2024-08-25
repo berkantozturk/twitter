@@ -96,7 +96,6 @@ export default {
     returnHome() {
     },
     addTweet() {
-      debugger
       const newTweetContent = this.tweets[0]?.content || "";
       if (newTweetContent.trim()) {
         this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
@@ -114,13 +113,14 @@ export default {
       localStorage.setItem('tweets', JSON.stringify(this.tweets));
     },
     loadTweets() {
-      const savedTweets = localStorage.getItem('tweets');
-      if (savedTweets) {
-        this.tweets = JSON.parse(savedTweets);
-      } else {
-        this.tweets = [{ content: "", username:"", disabled: false }];
-      }
+    const savedTweets = localStorage.getItem('tweets');
+    if (savedTweets) {
+      const allTweets = JSON.parse(savedTweets);
+      this.tweets = allTweets.filter(tweet => tweet.username === this.user.username);
+    } else {
+      this.tweets = [];
     }
+  },
   }
 };
 </script>
