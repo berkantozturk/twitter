@@ -1,36 +1,44 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center">
-      <v-col cols="12" md="25" class="text-center">
+    <v-row class="navbar" justify="center" align="center">
+      <v-col cols="12" md="0" class="text-center">
         <v-img class="pp" :src="require('@/assets/pp.jpg')"></v-img>
-        </v-col>
-        </v-row>
-        <v-row>
-        <v-col>
-        <h2>{{ user.name }}</h2>
-        <p>@{{ user.username }}</p>
-        <v-row justify="center" align="center">
-          <v-col cols="12" sm="20" class="text-center">
-            <span><strong>{{ user.following }}</strong> Following</span>
-          </v-col>
-          <v-col cols="10" sm="20" class="text-center">
-            <span><strong>{{ user.followers }}</strong> Followers</span>
-          </v-col>
-        </v-row>
       </v-col>
     </v-row>
-  <!-- <div class="headerp">
-    <a href="/home">
-      <img class="twitterp" @click="returnHome" :src="require('@/assets/twitter.png')">
-    </a> 
-    <a href="/profile">
-      <img class="profilep" @click="returnHome" :src="require('@/assets/profile.png')">
+    <v-row>
+      <v-col>
+        <h2>{{ user.name }}</h2>
+        <p>@{{ user.username }}</p>
+        <span><strong>{{ user.following }}</strong> Following</span> <br>
+        <span><strong>{{ user.followers }}</strong> Followers</span>
+      </v-col>
+    </v-row>
+
+    <v-row justify="center" align="center">
+      <v-col class="twitterLogo">
+      <a href="/home">
+        <img :src="require('@/assets/twitter.png')">
+      </a> 
+    </v-col>
+    <v-col class="profilelogo">
+      <a href="/profile">
+        <img :src="require('@/assets/profile.png')">
+      </a> 
+    </v-col>
+    <v-col class="settingslogo">
+      <a href="/settings">
+        <img :src="require('@/assets/settings.png')">
+      </a> 
+    </v-col>
+  </v-row>
+
+    <!-- <a href="/profile">
+      <img class="profilep" :src="require('@/assets/profile.png')">
     </a> 
     <a href="/settings">
-      <img class="settingsp" @click="returnHome" :src="require('@/assets/settings.png')">
+      <img class="settingsp" :src="require('@/assets/settings.png')">
     </a> 
-  </div>  
-  <div>
+  <div> 
     <h2>Tweetler</h2>      
     <textarea 
         class="firstText2" 
@@ -101,8 +109,6 @@ export default {
         this.user.name = `${formData.firstName} ${formData.lastName}`;
         this.user.username = formData.userId;
       }
-    },
-    returnHome() {
     },
     addTweet() {
       const newTweetContent = this.firstText || "";
@@ -271,5 +277,17 @@ export default {
     right: -120vh;
     bottom: 1vh;
   }
+  .twitterLogo img {
+  width: 100px;
+  height: 80px;
+}
+.profilelogo img {
+  width: 60px;
+  height: 60px;
+}
+.settingslogo img {
+  width: 45px;
+  height: 45px;
+}
   </style>
   

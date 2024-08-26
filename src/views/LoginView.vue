@@ -33,8 +33,7 @@
       </v-row>
       <br> 
       <v-col cols="12">
-            <v-btn variant="tonal" type="submit">Giriş Yap</v-btn>
-            <v-btn variant="text" @click="goToProfile">Üye Girişi İçin Tıklayınız</v-btn>
+            <v-btn variant="tonal" type="submit">Üye Girişi İçin Tıklayınız</v-btn>
           </v-col>
     </v-container>
     </v-form>
@@ -75,9 +74,6 @@ export default {
       }
     }
   },
-  goToProfile() {
-      this.$router.push('/profile');
-    }
 };
 </script>
 
