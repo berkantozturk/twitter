@@ -14,7 +14,20 @@
   </div>
 
   <div>
-    <h2>Tweetler</h2>
+    <h2>Tweetler</h2>      
+    <textarea 
+        class="tweet" 
+        cols="100" 
+        rows="5" 
+        v-model="firstText" 
+        placeholder="Bugün nasılsın ?.."
+      ></textarea>        
+      <img
+          class="newtweet"
+          @click="addTweet()"
+          :src="require('@/assets/new-tweet.png')"
+          alt="Add Tweet"
+        >
     <div v-for="(tweet, index) in tweets" :key="index">
       <textarea 
         class="tweet" 
@@ -24,16 +37,6 @@
         :disabled="index !== 0" 
         placeholder="Bugün nasılsın ?.."
       ></textarea>
-      <div v-if="index === 0" class="tweet-actions">
-        >
-        <img
-          class="newtweet"
-          @click="addTweet(index)"
-          :src="require('@/assets/new-tweet.png')"
-          alt="Add Tweet"
-        >
-      </div>
-      <div v-if="index !== 0" class="tweet-actions">
         <img
           class="delete"
           @click="deleteTweet(index)"
@@ -41,7 +44,6 @@
           alt="Delete Tweet"
         >
         <div class="username-info">@{{ tweet.username }}</div>
-      </div>
     </div>
   </div>
 </template>
@@ -57,6 +59,7 @@ export default {
         followers: 300
       },
       tweets: [],
+      firstText: "",
     };
   },
   created() {
@@ -65,18 +68,16 @@ export default {
   },
   methods: {
     addTweet() {
-      const newTweetContent = this.tweets[0]?.content || "";
+      const newTweetContent = this.firstText || "";
       if (newTweetContent.trim()) {
         this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
-        this.tweets[0].content = "";
         this.saveTweets();
+        this.firstText = ""
       }
     },
     deleteTweet(index) {
-      if (this.tweets.length > 1) {
         this.tweets.splice(index, 1);
         this.saveTweets();
-      }
     },
     saveTweets() {
       localStorage.setItem('tweets', JSON.stringify(this.tweets));
@@ -85,8 +86,6 @@ export default {
       const savedTweets = localStorage.getItem('tweets');
       if (savedTweets) {
         this.tweets = JSON.parse(savedTweets);
-      } else {
-        this.tweets = [{ content: "", disabled: false }];
       }
     },
     loadUserData() {
@@ -136,8 +135,8 @@ export default {
 }
 .username-info {
   position: relative;
-  left: -130vh;
-  bottom: 270px;
+  right: 40vh;
+  bottom: 340px;
 }
 .profile-container {
   max-width: 600px;

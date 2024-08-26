@@ -23,7 +23,20 @@
     </a> 
   </div>  
   <div>
-    <h2>Tweetler</h2>
+    <h2>Tweetler</h2>      
+    <textarea 
+        class="firstText2" 
+        cols="100" 
+        rows="5" 
+        v-model="firstText" 
+        placeholder="Bugün nasılsın ?.."
+      ></textarea>        
+      <img
+          class="newtweet"
+          @click="addTweet()"
+          :src="require('@/assets/new-tweet.png')"
+          alt="Add Tweet"
+        >
     <div v-for="(tweet, index) in tweets" :key="index">
       <textarea 
         class="tweet" 
@@ -33,16 +46,6 @@
         :disabled="index !== 0" 
         placeholder="Bugün nasılsın ?.."
       ></textarea>
-      <div v-if="index === 0" class="tweet-actions">
-        >
-        <img
-          class="newtweet"
-          @click="addTweet(index)"
-          :src="require('@/assets/new-tweet.png')"
-          alt="Add Tweet"
-        >
-      </div>
-      <div v-if="index !== 0" class="tweet-actions">
         <img
           class="delete"
           @click="deleteTweet(index)"
@@ -50,7 +53,6 @@
           alt="Delete Tweet"
         >
         <div class="username-info">@{{ tweet.username }}</div>
-      </div>     
     </div>
   </div>
 </template>
@@ -77,9 +79,7 @@ export default {
     }
   },
   mounted() {
-  
      this.getUserTweets();
-
   },
   methods: {
     getUserTweets(){
@@ -96,18 +96,16 @@ export default {
     returnHome() {
     },
     addTweet() {
-      const newTweetContent = this.tweets[0]?.content || "";
+      const newTweetContent = this.firstText || "";
       if (newTweetContent.trim()) {
         this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
-        this.tweets[0].content = "";
         this.saveTweets();
+        this.firstText = ""
       }
     },
     deleteTweet(index) {
-      if (this.tweets.length > 1) {
         this.tweets.splice(index, 1);
         this.saveTweets();
-      }
     },
     saveTweets() {
       localStorage.setItem('tweets', JSON.stringify(this.tweets));
@@ -124,7 +122,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .profile-containerp {
@@ -152,14 +149,17 @@ export default {
   text-align: 110px;
 }
 
+.firstText2{
+  margin-left:25vh;
+}
 .profile-detailsp {
   padding: 220px 20px;
   text-align: center;
 }
 .username-info {
   position: relative;
-  left: -130vh;
-  bottom: 270px;
+  right: 40vh;
+  bottom: 340px;
 }
 
 .usernamep {
