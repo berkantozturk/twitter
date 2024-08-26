@@ -12,38 +12,34 @@
       </a> 
     </div>
   </div>
-
   <div>
-    <h2>Tweetler</h2>      
-    <textarea 
-        class="tweet" 
-        cols="100" 
-        rows="5" 
-        v-model="firstText" 
-        placeholder="Bugün nasılsın ?.."
-      ></textarea>        
-      <img
-          class="newtweet"
-          @click="addTweet()"
-          :src="require('@/assets/new-tweet.png')"
-          alt="Add Tweet"
-        >
+    <h2>Tweetler</h2>
     <div v-for="(tweet, index) in tweets" :key="index">
       <textarea 
         class="tweet" 
         cols="100" 
         rows="5" 
         v-model="tweet.content" 
-        :disabled="index !== 0" 
+        :disabled="tweet.disabled" 
         placeholder="Bugün nasılsın ?.."
       ></textarea>
+      <div v-if="index === 0" class="tweet-actions">
+        >
+        <img
+          class="newtweet"
+          @click="addTweet(index)"
+          :src="require('@/assets/new-tweet.png')"
+          alt="Add Tweet"
+        >
+      </div>
+      <div v-if="index !== 0" class="tweet-actions">
         <img
           class="delete"
           @click="deleteTweet(index)"
           :src="require('@/assets/delete.png')"
           alt="Delete Tweet"
         >
-        <div class="username-info">@{{ tweet.username }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,32 +48,26 @@
 export default {
   data() {
     return {
-      user: {
-        name: "",
-        username: "",
-        following: 120,
-        followers: 300
-      },
-      tweets: [],
-      firstText: "",
+      tweets: []
     };
   },
   created() {
     this.loadTweets();
-    this.loadUserData();
   },
   methods: {
     addTweet() {
-      const newTweetContent = this.firstText || "";
+      const newTweetContent = this.tweets[0]?.content || "";
       if (newTweetContent.trim()) {
-        this.tweets.unshift({ content: newTweetContent, username:this.user.username, disabled: true });
+        this.tweets.push({ content: newTweetContent, disabled: true });
+        this.tweets[0].content = "";
         this.saveTweets();
-        this.firstText = ""
       }
     },
     deleteTweet(index) {
+      if (this.tweets.length > 1) {
         this.tweets.splice(index, 1);
         this.saveTweets();
+      }
     },
     saveTweets() {
       localStorage.setItem('tweets', JSON.stringify(this.tweets));
@@ -86,20 +76,13 @@ export default {
       const savedTweets = localStorage.getItem('tweets');
       if (savedTweets) {
         this.tweets = JSON.parse(savedTweets);
+      } else {
+        this.tweets = [{ content: "", disabled: false }];
       }
-    },
-    loadUserData() {
-      const savedData = localStorage.getItem('formData');
-      if (savedData) {
-        const formData = JSON.parse(savedData);
-        this.user.name = `${formData.firstName} ${formData.lastName}`;
-        this.user.username = formData.userId;
-      }
-    },
+    }
   }
 };
 </script>
-
 
 <style>
 .tweet-actions {
@@ -133,11 +116,7 @@ export default {
   padding: 10px;
   border: 1px solid #ccc;
 }
-.username-info {
-  position: relative;
-  right: 40vh;
-  bottom: 340px;
-}
+
 .profile-container {
   max-width: 600px;
   margin: 0 auto;

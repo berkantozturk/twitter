@@ -1,17 +1,43 @@
 <template>
   <div>
-    <h2>Giriş yapmak için aşağıdaki formu doldurunuz.</h2>
-    <form @submit.prevent="handleSubmit">
-      <div>
-        <label for="userId">Kullanıcı Adı:</label>
-        <input type="text" id="userId" v-model="userId" />
-      </div>
-      <div>
-        <label for="sifre">Şifre:</label>
-        <input type="password" id="sifre" v-model="sifre" />
-      </div>
-      <button type="submit">Giriş Yap</button>
-    </form>
+    <v-row justify="center" align="center" class="text-center">
+      <v-col cols="12">
+        <h2>Giriş yapmak için aşağıdaki formu doldurunuz.</h2>
+      </v-col>
+    </v-row>    
+    <v-form @submit.prevent="handleSubmit">
+      <v-container>
+      <v-row>
+        <v-col cols="6" md="5">
+          <v-text-field
+            v-model="userId"
+            :counter="10"
+            :rules="nameRules"
+            label="UserID"
+            hide-details
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6" md="5">
+          <v-text-field
+            v-model="password"
+            :counter="10"
+            :rules="password"
+            label="Password"
+            hide-details
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <br> 
+      <v-col cols="12">
+            <v-btn variant="tonal" type="submit">Giriş Yap</v-btn>
+            <v-btn variant="text" @click="goToProfile">Üye Girişi İçin Tıklayınız</v-btn>
+          </v-col>
+    </v-container>
+    </v-form>
     <div v-if="message" :class="{'success-message': isSuccess, 'error-message': !isSuccess}">
       {{ message }}
     </div>
@@ -20,14 +46,15 @@
 
 <script>
 export default {
-  data() {
-    return {
-      userId: '',
-      sifre: '',
-      message: '',
-      isSuccess: false
-    };
-  },
+  data: () => ({
+    valid: false,
+    userId: '',
+    password: '',
+    userIdRules: [
+   ],
+    passwordRules: [
+ ],
+  }),
   methods: {
     handleSubmit() {
       const savedData = localStorage.getItem('formData');
@@ -47,45 +74,16 @@ export default {
         this.isSuccess = false;
       }
     }
-  }
+  },
+  goToProfile() {
+      this.$router.push('/profile');
+    }
 };
 </script>
 
 <style scoped>
-form {
-  margin-bottom: 20px;
-}
-
-label {
-  margin-right: 10px;
-  display: block;
-  margin-top: 10px;
-}
-
-input {
-  margin-top: 5px;
-  margin-bottom: 10px;
-  display: block;
-}
-
-button {
-  display: block;
-  margin-top: 10px;
-}
-
-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 10vh;
-}
-
-.success-message {
-  color: green;
-}
-
-.error-message {
-  color: red;
+.text-center {
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

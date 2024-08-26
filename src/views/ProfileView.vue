@@ -1,17 +1,25 @@
 <template>
-  <div class="profile-containerp">
-    <div class="profile-detailsp">
-      <img class="pp" :src="require('@/assets/pp.jpg')">
-      <h2>{{ user.name }}</h2>
-      <p class="usernamep">@{{ user.username }}</p>
-      <p class="biop">{{ user.bio }}</p>
-      <div class="profile-statsp">
-        <span><strong>{{ user.following }}</strong> Following</span>
-        <span><strong>{{ user.followers }}</strong> Followers</span>
-      </div>
-    </div>
-  </div>
-  <div class="headerp">
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col cols="12" md="25" class="text-center">
+        <v-img class="pp" :src="require('@/assets/pp.jpg')"></v-img>
+        </v-col>
+        </v-row>
+        <v-row>
+        <v-col>
+        <h2>{{ user.name }}</h2>
+        <p>@{{ user.username }}</p>
+        <v-row justify="center" align="center">
+          <v-col cols="12" sm="20" class="text-center">
+            <span><strong>{{ user.following }}</strong> Following</span>
+          </v-col>
+          <v-col cols="10" sm="20" class="text-center">
+            <span><strong>{{ user.followers }}</strong> Followers</span>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  <!-- <div class="headerp">
     <a href="/home">
       <img class="twitterp" @click="returnHome" :src="require('@/assets/twitter.png')">
     </a> 
@@ -54,7 +62,8 @@
         >
         <div class="username-info">@{{ tweet.username }}</div>
     </div>
-  </div>
+  </div> -->
+  </v-container>
 </template>
 <script>
 export default {
@@ -245,8 +254,6 @@ export default {
     position: absolute;
     bottom: auto;
     bottom: -1vh;
-    right: -100vh;
-
   }
   .profilep {
     width: 60px;
