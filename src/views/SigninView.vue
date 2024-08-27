@@ -7,9 +7,7 @@
             v-model="firstname"
             :counter="10"
             :rules="nameRules"
-            label="First name"
-            hide-details
-            required
+            label="Ad"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -19,9 +17,7 @@
             v-model="lastname"
             :counter="10"
             :rules="nameRules"
-            label="Last name"
-            hide-details
-            required
+            label="Soyad"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -29,10 +25,8 @@
         <v-col cols="6" md="5">
           <v-text-field
             v-model="userId"
-            :rules="userIdRules"
-            label="User ID"
-            hide-details
-            required
+            :rules="nameRules"
+            label="Kullanıcı Adı"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -40,10 +34,8 @@
         <v-col cols="6" md="5">
           <v-text-field
             v-model="password"
-            :rules="passwordRules"
-            label="Password"
-            hide-details
-            required
+            :rules="nameRules"
+            label="Şifre"
             type="password"
           ></v-text-field>
         </v-col>
@@ -54,9 +46,12 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
-          <v-alert v-if="successMessage" type="success" dismissible>
+        <v-col cols="6" md="5">
+          <v-alert  v-if="successMessage" type="success" class="successMessage" dismissible>
             {{ successMessage }}
+          </v-alert>
+          <v-alert  v-if="failMessage" class="failMessage" dismissible>
+            {{ failMessage }}
           </v-alert>
           <br>
           <v-btn v-if="successMessage" variant="tonal" @click="goToLogin">Üye Girişi İçin Tıklayınız</v-btn>
@@ -69,22 +64,27 @@
 <script>
 export default {
   data: () => ({
-    valid: false,
     firstname: '',
     lastname: '',
     userId: '',
     password: '',
     successMessage: '',
+    failMessage:'',
 
     nameRules: [
-    ],
-    userIdRules: [
-   ],
-    passwordRules: [
- ],
+        value => {
+          if (value) return true
+
+          return 'Lütfen boş alanları doldurun!'
+        },
+      ],
   }),
   methods: {
     handleSubmit() {
+      if (!this.firstname || !this.lastname || !this.userId || !this.password) {
+        this.failMessage = 'Lütfen tüm alanları doldurun!';
+        return;
+      }
       this.saveFormData();
       this.successMessage = 'Başarıyla kayıt yaptınız!';
       this.clearForm(); 
@@ -111,4 +111,7 @@ export default {
 };
 </script>
 <style scoped>
+.failMessage{
+  color: red;
+}
 </style>

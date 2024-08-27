@@ -1,54 +1,50 @@
 <template>
-  <div class="profile-container">
-    <div class="header">
-      <a href="/home" >
-        <img class="twitter" @click="returnHome" :src="require('@/assets/twitter.png')" alt="Twitter">
-      </a> 
-      <a href="/profile" >
-        <img class="profile" @click="returnHome" :src="require('@/assets/profile.png')" alt="Profile">
-      </a> 
-      <a href="/settings" >
-        <img class="settings" @click="returnHome" :src="require('@/assets/settings.png')" alt="Settings">
-      </a> 
+  <div class="container">
+    <h2>Tweetler</h2>
+    <div class="text-box-container">
+      <v-textarea
+        cols="10"
+        rows="5"
+        v-model="firstText"
+        placeholder="Bugün nasılsın ?.."
+      ></v-textarea>
+      <img
+        class="addTweetBtn"
+        @click="addTweet()"
+        :src="require('@/assets/new-tweet.png')"
+      />
     </div>
   </div>
-  <div>
-    <h2>Tweetler</h2>
-    <div v-for="(tweet, index) in tweets" :key="index">
-      <textarea 
-        class="tweet" 
-        cols="100" 
-        rows="5" 
-        v-model="tweet.content" 
-        :disabled="tweet.disabled" 
-        placeholder="Bugün nasılsın ?.."
+  <div v-for="(tweet, index) in tweets" :key="index">
+    <div class="username">@{{ tweet.username }}</div>
+    <div class="container">
+      <textarea
+        class="tweet"
+        cols="100"
+        rows="5"
+        v-model="tweet.content"
+        :disabled="index !== 0"
       ></textarea>
-      <div v-if="index === 0" class="tweet-actions">
-        >
-        <img
-          class="newtweet"
-          @click="addTweet(index)"
-          :src="require('@/assets/new-tweet.png')"
-          alt="Add Tweet"
-        >
-      </div>
-      <div v-if="index !== 0" class="tweet-actions">
-        <img
-          class="delete"
-          @click="deleteTweet(index)"
-          :src="require('@/assets/delete.png')"
-          alt="Delete Tweet"
-        >
-      </div>
+      <img
+        class="deleteTweetBtn"
+        @click="deleteTweet(index)"
+        :src="require('@/assets/delete.png')"
+        alt="Delete Tweet"
+      />
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
-      tweets: []
+      user: {
+        name: "",
+        username: "",
+        following: 120,
+        followers: 300,
+      },
+      tweets: [],
     };
   },
   created() {
@@ -70,17 +66,17 @@ export default {
       }
     },
     saveTweets() {
-      localStorage.setItem('tweets', JSON.stringify(this.tweets));
+      localStorage.setItem("tweets", JSON.stringify(this.tweets));
     },
     loadTweets() {
-      const savedTweets = localStorage.getItem('tweets');
+      const savedTweets = localStorage.getItem("tweets");
       if (savedTweets) {
         this.tweets = JSON.parse(savedTweets);
       } else {
         this.tweets = [{ content: "", disabled: false }];
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -97,8 +93,6 @@ export default {
   height: 70px;
   margin-right: 750px;
   margin-bottom: 30px;
-
-
 }
 
 .delete {
@@ -106,7 +100,6 @@ export default {
   height: 40px;
   margin-left: 1580px;
   margin-bottom: 100px;
-
 }
 
 .tweet {
@@ -169,5 +162,18 @@ export default {
   justify-content: center;
   gap: 20px;
   margin-top: 10px;
+}
+.addTweetBtn {
+  position: absolute;
+  bottom: 5;
+  right: 0;
+  width: 13vh;
+  height: 10vh;
+}
+.deleteTweetBtn {
+  position: absolute;
+  right: 10;
+  width: 5vh;
+  height: 5vh;
 }
 </style>
